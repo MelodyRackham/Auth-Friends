@@ -58,9 +58,11 @@ const Buttons = styled.button`
   color: white;
   border-radius: 10px;
   font-size: 1rem;
+  font-family: 'Kalam', cursive;
 `;
 const UserNameForm = styled.input`
   padding: 10px;
   margin-right: 20px;
   border-radius: 10px;
+  font-family: 'Kalam', cursive;
 `;

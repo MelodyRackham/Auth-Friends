@@ -39,17 +39,22 @@ export default Friends;
 const Name = styled.h3`
   color: navy;
   font-size: 1.5rem;
+  font-family: 'Kalam', cursive;
 `;
 const Age = styled.h3`
   color: navy;
   font-size: 1.5rem;
+  font-family: 'Kalam', cursive;
 `;
 const Email = styled.h3`
   color: navy;
   font-size: 1.5rem;
+  font-family: 'Kalam', cursive;
 `;
 const FriendInfo = styled.div`
-  border: 3px solid pink;
+  border: 3px dotted navy;
   width: 50%;
+  font-family: 'Kalam', cursive;
+  margin: 0 auto;
   
 `;

@@ -67,11 +67,14 @@ const AddForm = styled.input`
   padding: 5px;
   border-radius: 7px;
   margin-right: 13px;
+  font-family: 'Kalam', cursive;
   
 `;
 const Buttons = styled.button`
   border-radius: 15px;
-  background-color: red;
+  background-color: navy;
   color: white;
   font-size: 1.5rem;
+  font-family: 'Kalam', cursive;
+  font-family: 'Kalam', cursive;
 `;
