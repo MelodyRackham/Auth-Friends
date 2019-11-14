@@ -1,47 +1,55 @@
-import React from "react";
-import Friend from "./Friend";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { getFriends } from "../actions";
-import { withRouter } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import AuthFriends from "./AuthFriends";
+import { axiosWithAuth } from "../utils/axiosWithAuth";
+import styled from "styled-components";
 
-class Friends extends React.Component {
-  componentDidMount() {
-    this.props.getFriends();
-  }
+const Friends = () => {
+  const [friends, setFriends] = useState([]);
 
-  render() {
-    console.log(`in render fetching status: ${this.props.fetching}`);
-    console.log(`in render friends array: ${this.props.friends}`);
-    return (
-      <div className="friends">
-        {this.props.fetchingData && <p>Loading Data...</p>}
+  useEffect(() => {
+    axiosWithAuth()
+      .get("/friends")
+      .then(res => {
+        setFriends(...friends, res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, []);
+  return (
+    <div>
+      <AuthFriends setFriends={setFriends} />
+      {friends.map(item => (
+        <div key={item.id}>
+          <FriendInfo>
+            <Name>Name: {item.name}</Name>
+            <Age>Age: {item.age}</Age>
+            <Email>Email: {item.email}</Email>
+          </FriendInfo>
+        </div>
+      ))}
+    </div>
+  );
+};
 
-        {this.props.friends &&
-          this.props.friends.map(friend => (
-            <div className="friend" key={friend.id}>
-              <Friend friend={friend} />
-            </div>
-          ))}
-      </div>
-    );
-  }
-}
+export default Friends;
 
-// Friends.propTypes = {
-//   friends: PropTypes.arrayOf(
-//     PropTypes.shape({
-//       id: PropTypes.number,
-//       name: PropTypes.string,
-//       age: PropTypes.number,
-//       email: PropTypes.string
-//     })
-//   )
-// };
+// styled componenets:
 
-const mapStateToProps = state => ({
-  friends: state.friends.friends,
-  fetchingData: state.friends.fetchingData
-});
-
-export default withRouter(connect(mapStateToProps, { getFriends })(Friends));
+const Name = styled.h3`
+  color: navy;
+  font-size: 1.5rem;
+`;
+const Age = styled.h3`
+  color: navy;
+  font-size: 1.5rem;
+`;
+const Email = styled.h3`
+  color: navy;
+  font-size: 1.5rem;
+`;
+const FriendInfo = styled.div`
+  border: 3px solid pink;
+  width: 50%;
+  
+`;

@@ -1,43 +1,66 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { loggingStart } from '../actions';
+import React, { useState } from "react";
+import { axiosWithAuth } from "../utils/axiosWithAuth";
+import styled from "styled-components";
 
-class Login extends React.Component {
-  state = {
-    credentials: { username: '', password: '' },
-  };
-  handleLogin = event => {
-    event.preventDefault();
-    this.props.loggingStart(this.state.credentials).then(() => this.props.history.push('/friends'));
+function Login(props) {
+  const [data, setData] = useState({
+    username: "",
+    password: ""
+  });
+
+  const handleChange = e => {
+    setData({
+      ...data,
+      [e.target.name]: e.target.value
+    });
   };
 
-  handleChange = event => {
-    this.setState({ credentials: { ...this.state.credentials, [event.target.name]: event.target.value } });
+  const handleSubmit = e => {
+    e.preventDefault();
+    axiosWithAuth()
+      .post("/login", data)
+      .then(res => {
+        localStorage.setItem("token", res.data.payload);
+        props.history.push("/private");
+      })
+      .catch(err => console.log(err));
   };
 
-  render() {
-    return (
-      <form onSubmit={this.handleLogin}>
-        <fieldset>
-          name:{' '}
-          <input type='text' name='username' value={this.state.credentials.username} onChange={this.handleChange} />{' '}
-          <br />
-          password:
-          <input
-            type='password'
-            name='password'
-            value={this.state.credentials.password}
-            onChange={this.handleChange}
-          />{' '}
-          <br />
-          <button type='submit'> Submit </button>
-        </fieldset>
+  return (
+    <div>
+      <form onSubmit={handleSubmit}>
+        <UserNameForm
+          type="text"
+          name="username"
+          value={data.username}
+          onChange={handleChange}
+          placeholder="Username"
+        />
+        <UserNameForm
+          type="password"
+          name="password"
+          value={data.password}
+          onChange={handleChange}
+          placeholder="Password"
+        />
+        <Buttons>Login</Buttons>
       </form>
-    );
-  }
+    </div>
+  );
 }
 
-export default connect(
-  null,
-  { loggingStart },
-)(Login);
+export default Login;
+
+// styled components:
+
+const Buttons = styled.button`
+  background-color: black;
+  color: white;
+  border-radius: 10px;
+  font-size: 1rem;
+`;
+const UserNameForm = styled.input`
+  padding: 10px;
+  margin-right: 20px;
+  border-radius: 10px;
+`;
